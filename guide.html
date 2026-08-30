@@ -225,30 +225,34 @@ const STEPS = {
     {
       viz: "signup",
       en: { t: "Create your company account",
-        l: "Go to saysocard.com and create the account with your work email. This is the login you will use to run everything.",
+        l: "Go to saysocard.com and tap <b>Create a free company account</b>. Use your work email. This is the login you will use to run everything.",
         p: ["Use an email you actually check — approval alerts and receipts go there.",
             "Pick a password you can share with whoever else runs the office.",
-            "You can enter starting funds now or leave it blank and fund later."] },
+            "Starting funds are optional. <b>$10 or more</b> sends you straight to Stripe after you tap <b>Create account &amp; set up funding</b>. Leave it blank and fund later."] },
       es: { t: "Crea la cuenta de tu empresa",
-        l: "Entra a saysocard.com y crea la cuenta con tu correo de trabajo. Con ese correo vas a administrar todo.",
+        l: "Entra a saysocard.com y toca <b>Create a free company account</b>. Usa tu correo de trabajo. Con ese correo vas a administrar todo.",
         p: ["Usa un correo que revises — ahí llegan las alertas de aprobación y los recibos.",
             "Elige una contraseña que puedas compartir con quien más maneje la oficina.",
-            "Puedes poner fondos iniciales ahora o dejarlo en blanco y depositar después."] }
+            "Los fondos iniciales son opcionales. <b>$10 o más</b> te manda a Stripe después de tocar <b>Create account &amp; set up funding</b>. Déjalo en blanco y deposita después."] }
     },
     {
       viz: "fund",
-      en: { t: "Put money in the company wallet",
-        l: "The company wallet is the pot. Everything your crew spends comes out of it, so it has to have money in it before a card will work.",
-        p: ["Bank transfer (ACH) is cheapest but takes a few business days to clear.",
-            "Paying by card posts right away — use it the first time so you are not waiting.",
-            "You can top up any time from the Company wallet section."],
-        n: "<b>Plan ahead.</b> A card declines the moment the wallet is empty, even if the crew card shows a balance. Keep a cushion." },
-      es: { t: "Deposita dinero en la billetera de la empresa",
-        l: "La billetera de la empresa es la bolsa común. Todo lo que gasta tu equipo sale de ahí, así que necesita fondos antes de que una tarjeta funcione.",
-        p: ["La transferencia bancaria (ACH) es la más barata pero tarda unos días hábiles.",
-            "Pagar con tarjeta entra de inmediato — úsalo la primera vez para no esperar.",
-            "Puedes agregar más en cualquier momento desde la sección Billetera de la empresa."],
-        n: "<b>Planea con tiempo.</b> La tarjeta se rechaza en cuanto la billetera queda vacía, aunque la tarjeta del trabajador muestre saldo. Deja un colchón." }
+      en: { t: "Add funds from bank or card",
+        l: "In <b>Company wallet</b>, type an amount in <b>Add funds (USD)</b> and tap <b>Add funds from bank or card</b>. That opens Stripe. Pay from your business bank (ACH) or a card.",
+        p: ["Minimum is $10.",
+            "Card posts right away — use it the first time so you are not waiting.",
+            "Bank transfer (ACH) is cheaper but takes a few business days. It shows up automatically once paid.",
+            "Stripe sends you back to the console. You will see sign-in again — that is normal. Sign in with the same email and password.",
+            "Card money shows as <b>Balance</b>. ACH shows <b>pending (bank payment clearing)</b> until it posts. Sign-in checks for cleared transfers."],
+        n: "<b>Plan ahead.</b> A card declines the moment the company wallet is empty, even if the crew card shows a balance. Keep a cushion." },
+      es: { t: "Deposita con banco o tarjeta",
+        l: "En <b>Company wallet</b>, escribe un monto en <b>Add funds (USD)</b> y toca <b>Add funds from bank or card</b>. Se abre Stripe. Paga desde tu banco de la empresa (ACH) o con tarjeta.",
+        p: ["El mínimo es $10.",
+            "Con tarjeta el dinero entra de inmediato — úsalo la primera vez para no esperar.",
+            "La transferencia (ACH) es más barata pero tarda unos días hábiles. Aparece sola cuando se acredita.",
+            "Stripe te regresa a la consola. Vas a ver el inicio de sesión otra vez — es normal. Entra con el mismo correo y contraseña.",
+            "Con tarjeta se ve como <b>Balance</b>. ACH se ve como <b>pending (bank payment clearing)</b> hasta que se acredita. Al entrar, el sistema busca transferencias ya pagadas."],
+        n: "<b>Planea con tiempo.</b> La tarjeta se rechaza en cuanto la billetera de la empresa queda vacía, aunque la tarjeta del trabajador muestre saldo. Deja un colchón." }
     },
     {
       viz: "merchants",
@@ -266,28 +270,45 @@ const STEPS = {
     {
       viz: "addemp",
       en: { t: "Add your crew",
-        l: "Add each person with their name and a 4–6 digit PIN. Give them a starting balance out of the company wallet if you want.",
+        l: "Add each person with their name and a 4–6 digit PIN. You are not issuing the card here — they activate it themselves in a later step.",
         p: ["The PIN is how they sign in at the wallet page — tell it to them directly.",
-            "You are not issuing the card here. They issue it themselves in the next step.",
-            "You can add funds, freeze a card, or remove someone at any time."] },
+            "Copy the share box (name, PIN, saysocard.com/employee) and send it yourself. We do not text it.",
+            "You can add funds, disable someone, or remove them at any time. Remove returns leftover balance to the company wallet."] },
       es: { t: "Agrega a tu equipo",
-        l: "Agrega a cada persona con su nombre y un PIN de 4 a 6 dígitos. Si quieres, dales un saldo inicial de la billetera de la empresa.",
+        l: "Agrega a cada persona con su nombre y un PIN de 4 a 6 dígitos. Aquí no estás emitiendo la tarjeta — ellos la activan después.",
         p: ["Con ese PIN entran a la página de la billetera — dáselos en persona.",
-            "Aquí no estás emitiendo la tarjeta. Ellos la emiten en el siguiente paso.",
-            "Puedes agregar fondos, congelar una tarjeta o quitar a alguien cuando quieras."] }
+            "Copia la caja para compartir (nombre, PIN, saysocard.com/employee) y envíala tú. Nosotros no la mandamos por mensaje.",
+            "Puedes agregar fondos, desactivar a alguien o quitarlo cuando quieras. Si lo quitas, el saldo que le quede vuelve a la billetera de la empresa."] }
+    },
+    {
+      viz: "loadmoney",
+      en: { t: "Load money onto a person",
+        l: "Money in the company wallet does not spend until you put some on a person. Optional <b>Initial funds (USD)</b> at add time comes out of the wallet, not their pocket.",
+        p: ["Later, tap <b>Add funds</b> on their row and type an amount.",
+            "If the wallet is short, SaySo asks to add money and sends you back to Stripe.",
+            "Crew never put their own money on the card."],
+        n: "<b>Wallet first.</b> A card can still decline if the company wallet is empty, even if that person’s card shows a balance." },
+      es: { t: "Carga dinero a una persona",
+        l: "El dinero de la billetera de la empresa no se gasta hasta que se lo pones a alguien. Los <b>Initial funds (USD)</b> opcionales al agregar salen de la billetera, no de su bolsillo.",
+        p: ["Después, toca <b>Add funds</b> en su fila y escribe un monto.",
+            "Si no alcanza la billetera, SaySo te pide agregar dinero y te manda otra vez a Stripe.",
+            "El equipo nunca pone su propio dinero en la tarjeta."],
+        n: "<b>Primero la billetera.</b> La tarjeta se puede rechazar si la billetera de la empresa está vacía, aunque la de esa persona muestre saldo." }
     },
     {
       viz: "identity",
       en: { t: "Your crew activate their own cards",
-        l: "Send each person to saysocard.com/employee. They sign in with their name and PIN, then confirm their email, mobile number and date of birth, and agree to the cardholder terms. The card issues on the spot.",
+        l: "Send each person to saysocard.com/employee. They sign in with their name and PIN, then enter email, mobile and date of birth, and agree to the <b>Cross River Bank Authorized User Terms</b> and <b>E-sign policy</b>. The card issues on the spot.",
         p: ["Date of birth is not optional — the bank verifies identity against it.",
             "Without it the card stays locked: it declines everywhere and will not add to a phone.",
+            "If it still says Locked, they use <b>Finish verifying your identity</b>, enter DOB again, and tap <b>Unlock my card</b>.",
             "Nobody in your office needs to collect this. Each person enters their own."],
         n: "<b>Why it matters.</b> This one field is the most common reason a brand-new card does not work. The wallet page asks for it up front so it does not bite you later." },
       es: { t: "Tu equipo activa sus propias tarjetas",
-        l: "Manda a cada persona a saysocard.com/employee. Entran con su nombre y PIN, confirman su correo, su celular y su fecha de nacimiento, y aceptan los términos del titular. La tarjeta se emite al instante.",
+        l: "Manda a cada persona a saysocard.com/employee. Entran con su nombre y PIN, ponen correo, celular y fecha de nacimiento, y aceptan los <b>Cross River Bank Authorized User Terms</b> y la <b>E-sign policy</b>. La tarjeta se emite al instante.",
         p: ["La fecha de nacimiento no es opcional — el banco verifica la identidad con ella.",
             "Sin ella la tarjeta queda bloqueada: se rechaza en todos lados y no se puede agregar al teléfono.",
+            "Si sigue diciendo Locked, usan <b>Finish verifying your identity</b>, ponen la fecha otra vez y tocan <b>Unlock my card</b>.",
             "Nadie en tu oficina tiene que recoger este dato. Cada quien pone el suyo."],
         n: "<b>Por qué importa.</b> Este dato es la razón más común de que una tarjeta nueva no funcione. La página lo pide desde el principio para evitarte el problema." }
     },
@@ -297,12 +318,12 @@ const STEPS = {
         l: "The dashboard shows the company wallet, what is loaded on crew cards, how many cards are active, and what has been spent this month.",
         p: ["A card showing <b>Locked</b> means the issuer is still waiting on something — the console tells you exactly what.",
             "Use “Re-check cards with the issuer” after someone finishes verifying.",
-            "Freeze a card, disable a person, or pull their remaining balance back at any time."] },
+            "Disable a person, or remove them to pull their remaining balance back, at any time."] },
       es: { t: "Vigila el dinero",
         l: "El panel muestra la billetera de la empresa, cuánto está cargado en las tarjetas, cuántas tarjetas están activas y lo gastado este mes.",
         p: ["Una tarjeta que dice <b>Locked</b> significa que al banco todavía le falta algo — la consola te dice qué.",
             "Usa “Re-check cards with the issuer” después de que alguien termine de verificarse.",
-            "Congela una tarjeta, desactiva a una persona o recupera su saldo cuando quieras."] }
+            "Desactiva a una persona, o quítala para recuperar su saldo, cuando quieras."] }
     }
   ],
   crew: [
@@ -322,16 +343,18 @@ const STEPS = {
     {
       viz: "identity",
       en: { t: "Activate your card",
-        l: "Enter your email, your mobile number and your date of birth, then check the box agreeing to the cardholder terms. Tap Activate my card.",
+        l: "Enter your email, your mobile number and your date of birth, then check <b>I agree to the Cross River Bank Authorized User Terms and E-sign policy</b>. Tap <b>Activate my card</b>.",
         p: ["The bank that issues the card uses your date of birth to confirm who you are.",
             "Use a mobile number that can receive texts — you will need it in a minute.",
-            "Your card appears right away with a balance your boss loaded."],
+            "Your card appears right away with a balance your boss loaded.",
+            "If it still says Locked, finish <b>Finish verifying your identity</b>, enter your date of birth again, and tap <b>Unlock my card</b>."],
         n: "<b>Skip the date of birth and the card will not work.</b> It stays locked, declines at the register, and your phone will refuse to add it." },
       es: { t: "Activa tu tarjeta",
-        l: "Pon tu correo, tu número de celular y tu fecha de nacimiento, y marca la casilla aceptando los términos del titular. Toca Activate my card.",
+        l: "Pon tu correo, tu número de celular y tu fecha de nacimiento, y marca <b>I agree to the Cross River Bank Authorized User Terms and E-sign policy</b>. Toca <b>Activate my card</b>.",
         p: ["El banco que emite la tarjeta usa tu fecha de nacimiento para confirmar quién eres.",
             "Usa un celular que reciba mensajes de texto — lo vas a necesitar en un minuto.",
-            "Tu tarjeta aparece de inmediato con el saldo que cargó tu patrón."],
+            "Tu tarjeta aparece de inmediato con el saldo que cargó tu patrón.",
+            "Si sigue diciendo Locked, completa <b>Finish verifying your identity</b>, pon la fecha otra vez y toca <b>Unlock my card</b>."],
         n: "<b>Sin la fecha de nacimiento la tarjeta no sirve.</b> Se queda bloqueada, se rechaza en la caja, y tu teléfono no la va a aceptar." }
     },
     {
@@ -350,15 +373,15 @@ const STEPS = {
     {
       viz: "addwallet",
       en: { t: "Add it to your phone",
-        l: "Open the <b>Wallet</b> app on your phone. Tap <b>+</b>, then <b>Debit or Credit Card</b>, then <b>Enter Card Details Manually</b>. Type in the number, expiry and CVC.",
+        l: "Open the <b>Wallet</b> app on your phone. Tap <b>+</b>, then <b>Add Card</b>, then <b>Enter Card Details Manually</b>. Type in the number, expiry and CVC.",
         p: ["iPhone: the Wallet app. Android: Google Wallet. Both work the same way.",
             "Type the numbers carefully — a wrong digit reads as “card not supported”.",
-            "Your name and the Carlsbad billing address are already on file."] },
+            "If a wallet or store asks for a billing address, use <b>457 George Shoup Relief Route, Carlsbad, NM 88220</b>."] },
       es: { t: "Agrégala a tu teléfono",
-        l: "Abre la app <b>Wallet</b> en tu teléfono. Toca <b>+</b>, luego <b>Tarjeta de débito o crédito</b>, y después <b>Ingresar datos manualmente</b>. Escribe el número, la fecha y el CVC.",
+        l: "Abre la app <b>Wallet</b> en tu teléfono. Toca <b>+</b>, luego <b>Add Card</b>, y después <b>Enter Card Details Manually</b>. Escribe el número, la fecha y el CVC.",
         p: ["iPhone: la app Wallet. Android: Google Wallet. Funcionan igual.",
             "Escribe los números con cuidado — un dígito mal se ve como “tarjeta no compatible”.",
-            "Tu nombre y la dirección de facturación de Carlsbad ya están registrados."] }
+            "Si una wallet o una tienda pide dirección de facturación, usa <b>457 George Shoup Relief Route, Carlsbad, NM 88220</b>."] }
     },
     {
       viz: "otp",
@@ -390,13 +413,13 @@ const STEPS = {
       viz: "trouble",
       en: { t: "If something does not work",
         l: "Almost every problem is one of three things. Check them in this order before calling the office.",
-        p: ["<b>Card says Locked</b> — open the wallet page and finish “Finish verifying your identity”.",
+        p: ["<b>Card says Locked</b> — open the wallet page and finish “Finish verifying your identity”, then tap <b>Unlock my card</b>.",
             "<b>Declined at the register</b> — check your balance, then whether that business is approved.",
             "<b>Phone will not add the card</b> — the card is not active yet. Fix that first, then try again."],
         n: "<b>A phone refusing your card is almost never the phone.</b> It means the card is not active. Open the wallet page and read what it says at the top." },
       es: { t: "Si algo no funciona",
         l: "Casi todos los problemas son una de tres cosas. Revísalas en este orden antes de llamar a la oficina.",
-        p: ["<b>La tarjeta dice Locked</b> — abre la página de la billetera y completa “Finish verifying your identity”.",
+        p: ["<b>La tarjeta dice Locked</b> — abre la página de la billetera, completa “Finish verifying your identity” y toca <b>Unlock my card</b>.",
             "<b>Rechazada en la caja</b> — revisa tu saldo, y luego si ese negocio está aprobado.",
             "<b>El teléfono no acepta la tarjeta</b> — la tarjeta todavía no está activa. Arregla eso primero."],
         n: "<b>Que el teléfono rechace tu tarjeta casi nunca es culpa del teléfono.</b> Significa que la tarjeta no está activa. Abre la página de la billetera y lee lo que dice arriba." }
@@ -415,16 +438,16 @@ const VIZ = {
       <div class="lbl">Company name</div><div class="fld filled">J&amp;A Oilfield Services</div>
       <div class="lbl">Work email</div><div class="fld filled">office@company.com</div>
       <div class="lbl">Password</div><div class="fld focus">••••••••</div>
-      <div class="btn" style="margin-top:4px">Create account</div>
+      <div class="btn" style="margin-top:4px">Create account &amp; set up funding</div>
     </div>`,
   fund: () => `
     <div class="scr-top">Company wallet</div>
     <div class="scr-body">
       <div class="tile"><div class="sm">Wallet balance</div><div class="big">$5,000.00</div></div>
-      <div class="lbl">Add funds</div>
+      <div class="lbl">Add funds (USD)</div>
       <div class="fld filled">$2,500.00</div>
-      <div class="btn ghost">Bank transfer · 2–3 days</div>
-      <div class="btn">Card · instant</div>
+      <div class="btn">Add funds from bank or card</div>
+      <div style="font-size:.52rem;color:#8b93a1;line-height:1.4;padding:0 2px">ACH · a few business days<br>Card · posts now</div>
     </div>`,
   merchants: () => `
     <div class="scr-top">Approved businesses</div>
@@ -440,9 +463,20 @@ const VIZ = {
     <div class="scr-body">
       <div class="lbl">Name</div><div class="fld filled">Luis Rios</div>
       <div class="lbl">PIN</div><div class="fld filled">••••</div>
-      <div class="lbl">Initial funds</div><div class="fld focus">$500.00</div>
+      <div class="lbl">Initial funds (USD, optional)</div><div class="fld focus">$500.00</div>
       <div class="btn">Add employee</div>
       <div class="menu-item" style="border-radius:7px;margin-top:4px">Luis Rios <span class="chip wait">awaiting activation</span></div>
+    </div>`,
+  loadmoney: () => `
+    <div class="scr-top">Employees</div>
+    <div class="scr-body">
+      <div class="menu-item" style="border-radius:7px">Luis Rios <span class="chip wait">awaiting</span></div>
+      <div class="lbl">Add funds (USD)</div>
+      <div class="fld focus">$250.00</div>
+      <div class="btn">Add funds</div>
+      <div style="background:#f4f6f8;border:1px solid #e5e7eb;border-radius:7px;padding:7px 8px;font-size:.52rem;color:#3d4451;line-height:1.45">
+        Luis Rios's SaySo card<br>PIN: ••••<br>saysocard.com/employee
+      </div>
     </div>`,
   identity: () => `
     <div class="scr-top">Activate your card</div>
@@ -450,9 +484,9 @@ const VIZ = {
       <div class="lbl">Email</div><div class="fld filled">lrios@company.com</div>
       <div class="lbl">Mobile</div><div class="fld filled">(575) 341-0884</div>
       <div class="lbl">Date of birth</div><div class="fld focus pulse">MM / DD / YYYY</div>
-      <div class="row" style="font-size:.58rem;color:#5b6270;margin-top:2px">
-        <span style="width:11px;height:11px;border:1px solid var(--purple);border-radius:3px;background:var(--purple);color:#fff;font-size:.5rem;display:flex;align-items:center;justify-content:center">✓</span>
-        I agree to the cardholder terms
+      <div class="row" style="font-size:.52rem;color:#5b6270;margin-top:2px;line-height:1.35">
+        <span style="width:11px;height:11px;border:1px solid var(--purple);border-radius:3px;background:var(--purple);color:#fff;font-size:.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</span>
+        Cross River Bank terms + E-sign
       </div>
       <div class="btn amber">Activate my card</div>
     </div>`,
@@ -493,7 +527,7 @@ const VIZ = {
   addwallet: () => `
     <div class="wallet-hdr"><span>Wallet</span><span style="font-size:.9rem">+</span></div>
     <div class="scr-body" style="padding-top:9px">
-      <div class="menu-item" style="border-radius:7px">Debit or Credit Card <span style="color:#b6bcc7">›</span></div>
+      <div class="menu-item" style="border-radius:7px">Add Card <span style="color:#b6bcc7">›</span></div>
       <div class="menu-item hl" style="border-radius:7px">Enter Card Details Manually <span style="color:var(--amber)">›</span></div>
       <div class="lbl" style="margin-top:6px">Card number</div>
       <div class="fld focus">5432 1098 7654 7270</div>
