@@ -6,17 +6,37 @@
 <title>Payment Successful</title>
 <style>
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #f4f6f8; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-  .card { background: #fff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .card { background: #fff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.08); max-width: 420px; }
   .check { font-size: 3rem; }
   a { color: #635bff; }
+  p { line-height: 1.5; }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="check">&#9989;</div>
-  <h1>Payment successful</h1>
-  <p>Thank you! Your payment has been processed.</p>
-  <p><a href="/">Make another payment</a></p>
+  <h1>You're all set</h1>
+  <p id="msg">Your payment went through.</p>
+  <p id="links"><a href="/admin">Go to your company console</a></p>
 </div>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  const msg = document.getElementById('msg');
+  const links = document.getElementById('links');
+  if (q.get('funding') === 'success') {
+    location.replace('/admin?funding=success');
+    return;
+  }
+  if (q.get('billing') === 'success') {
+    location.replace('/admin?billing=success');
+    return;
+  }
+  // Checkout return URLs live in the Stripe/Supabase backend (not this repo).
+  // Do not send people to the marketing homepage with "Make another payment".
+  msg.textContent = 'Your payment went through.';
+  links.innerHTML = '<a href="/admin">Company console</a> &middot; <a href="/employee">Employee wallet</a>';
+})();
+</script>
 </body>
 </html>

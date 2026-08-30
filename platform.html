@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SaySo Platform</title>
+<title>SaySo Platform — staff only</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #f4f6f8; color: #1a1a2e; }
@@ -23,10 +24,11 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>SaySo Platform</h1>
+  <h1>SaySo staff</h1>
+  <p class="msg" style="margin-bottom:16px">This page is for SaySo operators only. It is not a customer sign-in. If you run a crew, use the <a href="/admin">company console</a>. If you were given a card, go to the <a href="/employee">employee wallet</a>.</p>
 
   <div class="card" id="login">
-    <label>Platform password</label>
+    <label>Staff password</label>
     <input id="pw" type="password">
     <button onclick="unlock()">Unlock</button>
     <div class="msg err" id="loginErr"></div>
@@ -34,7 +36,7 @@
 
   <div id="panel" style="display:none">
     <div class="card">
-      <div>Total fees earned (1% per transaction)</div>
+      <div>Fees recorded by the API (fees_cents). Customer billing is $10 per active card/month after the first 2 free — no per-transaction software fee on the public site.</div>
       <div class="big" id="totalFees">$0.00</div>
       <button class="gray" onclick="setupIssuing()">Set up card payments (one time)</button>
       <div class="msg" id="setupMsg"></div>
