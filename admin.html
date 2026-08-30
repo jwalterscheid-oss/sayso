@@ -29,13 +29,43 @@
   .msg { margin-top: 12px; font-size: .9rem; word-break: break-all; }
   .msg a { color: #635bff; }
   .err { color: #c0392b; }
+  .sublink { display:block; margin-top:16px; font-size:.95rem; }
+  .sublink a { color:#635bff; font-weight:600; cursor:pointer; }
+  .checkrow { display:flex; gap:10px; align-items:flex-start; margin:16px 0 4px; font-weight:400; }
+  .checkrow input { width:auto; margin-top:3px; }
+  .checkrow span { font-size:.9rem; line-height:1.45; }
+  details.adv { margin-top:14px; }
+  details.adv summary { cursor:pointer; font-weight:600; color:#635bff; font-size:.9rem; }
+  details.adv .adv-body { margin-top:8px; }
+  .share { background:#f4f6f8; border:1px solid #e5e7eb; border-radius:10px; padding:14px 16px; margin-top:14px; }
+  .share h3 { font-size:1rem; margin-bottom:8px; }
+  .share pre { white-space:pre-wrap; font-family:inherit; font-size:.92rem; line-height:1.5; background:#fff; border:1px solid #eee; border-radius:8px; padding:12px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1 id="title">SaySo</h1>
 
-  <div class="card" id="login">
+  <div class="card" id="signup">
+    <h2 style="font-size:1.1rem">Create a free company account</h2>
+    <label>Company name</label>
+    <input id="sname" placeholder="Your Company LLC">
+    <label>Email</label>
+    <input id="semail" type="email" placeholder="you@yourcompany.com">
+    <label>Password</label>
+    <input id="spw" type="password" placeholder="8+ characters">
+    <label>Your mobile number (optional — for approval alerts if texting is on)</label>
+    <input id="sphone" type="tel" inputmode="tel" placeholder="(555) 123-4567">
+    <label>Starting funds (USD) — loaded from your bank via Stripe</label>
+    <input id="sf" type="number" min="10" step="0.01" placeholder="500.00">
+    <label class="checkrow"><input id="sterms" type="checkbox"><span>I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.</span></label>
+    <button onclick="signup()">Create account &amp; set up funding</button>
+    <div class="msg">After your account is created you can connect your business bank (or pay by card) and load these starting funds. That balance is what you put on your crew's cards. Leave blank to fund later. First 2 cards are free, then $10 per active card/month — no per-transaction software fee.</div>
+    <div class="msg" id="signupMsg"></div>
+    <div class="sublink">Already have an account? <a href="#" onclick="showLogin();return false">Sign in</a></div>
+  </div>
+
+  <div class="card" id="login" style="display:none">
     <h2 style="font-size:1.1rem">Sign in to your company</h2>
     <label>Email</label>
     <input id="lemail" type="email" placeholder="you@yourcompany.com">
@@ -43,21 +73,7 @@
     <input id="lpw" type="password">
     <button onclick="unlock()">Sign in</button>
     <div class="msg err" id="loginErr"></div>
-  </div>
-
-  <div class="card" id="signup">
-    <h2 style="font-size:1.1rem">New to SaySo? Create a free company account</h2>
-    <label>Company name</label>
-    <input id="sname" placeholder="Your Company LLC">
-    <label>Email</label>
-    <input id="semail" type="email" placeholder="you@yourcompany.com">
-    <label>Password</label>
-    <input id="spw" type="password" placeholder="8+ characters">
-    <label>Starting funds (USD) — loaded from your bank via Stripe</label>
-    <input id="sf" type="number" min="10" step="0.01" placeholder="500.00">
-    <button onclick="signup()">Create account &amp; set up funding</button>
-    <div class="msg">After your account is created you'll go straight to Stripe to connect your business bank (or pay by card) and load these starting funds. That balance is what you put on your crew's cards. Leave blank to fund later.</div>
-    <div class="msg" id="signupMsg"></div>
+    <div class="sublink">New here? <a href="#" onclick="showSignup();return false">Create a free company account</a></div>
   </div>
 
   <div id="panel" style="display:none">
@@ -98,16 +114,24 @@
     </div>
 
     <div class="card">
-      <h2 style="font-size:1.1rem">Add a business</h2>
+      <h2 style="font-size:1.1rem">Where can the card be used?</h2>
+      <div class="msg" style="margin-top:6px">Add the businesses your crew may spend at. New businesses default to the card allowlist — no bank details needed from the shop.</div>
       <label>Business name</label>
       <input id="bn" placeholder="Acme Well Service LLC">
-      <label>How will they get paid?</label>
-      <select id="bk">
-        <option value="card">Card allowlist — employees pay with company card at their machine (no bank details needed)</option>
-        <option value="connect">Stripe onboarding — receive in-app payments (they connect their own bank)</option>
-      </select>
-      <label>Contact email (optional — used for Stripe onboarding)</label>
-      <input id="em" type="email" placeholder="owner@acme.com">
+      <input id="bk" type="hidden" value="card">
+      <input id="em" type="email" style="display:none" placeholder="owner@acme.com">
+      <details class="adv">
+        <summary>Advanced</summary>
+        <div class="adv-body">
+          <label>How will they get paid?</label>
+          <select id="bkAdv" onchange="document.getElementById('bk').value=this.value; document.getElementById('em').style.display=this.value==='connect'?'block':'none'">
+            <option value="card" selected>Card allowlist — employees pay with company card at their machine (no bank details needed)</option>
+            <option value="connect">Stripe onboarding — receive in-app payments (they connect their own bank)</option>
+          </select>
+          <label>Contact email (optional — used for Stripe onboarding)</label>
+          <input id="emAdv" type="email" placeholder="owner@acme.com" oninput="document.getElementById('em').value=this.value">
+        </div>
+      </details>
       <button onclick="addMerchant()">Add business</button>
       <div class="msg" id="addMsg"></div>
     </div>
@@ -134,8 +158,8 @@
 
     <div class="card" id="approvalsCard">
       <h2 style="font-size:1.1rem">Instant approvals</h2>
-      <div class="msg">When a swipe is at a business not on your list — or over your approval limit — it declines once and you get a text with a one-tap approve link. Approve it and your hand just runs the card again (good for 30 minutes).</div>
-      <label>Your mobile number (approval texts go here)</label>
+      <div class="msg">When a swipe is at a business not on your list — or over your approval limit — it declines once and shows up here. Approve it and your hand just runs the card again (good for 30 minutes). If texting is switched on for your account, we can also send a one-tap link to the mobile number below.</div>
+      <label>Your mobile number</label>
       <input id="setPhone" type="tel" inputmode="tel" placeholder="(555) 123-4567">
       <label>Approval limit (USD, optional — swipes above this need your OK even at approved businesses)</label>
       <input id="setLimit" type="number" min="1" step="0.01" placeholder="e.g. 250.00 — leave blank for no limit">
@@ -169,6 +193,21 @@
 const P='/functions/v1/app';
 let EM = '', PW = '';
 const H = () => ({ 'Content-Type': 'application/json', 'x-company-email': EM, 'x-company-password': PW });
+
+function showLogin() {
+  document.getElementById('signup').style.display = 'none';
+  document.getElementById('login').style.display = 'block';
+  document.getElementById('lemail').focus();
+}
+function showSignup() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('signup').style.display = 'block';
+  document.getElementById('sname').focus();
+}
+(function () {
+  const q = new URLSearchParams(location.search);
+  if (q.get('funding') === 'success' || q.get('billing') === 'success') showLogin();
+})();
 
 async function unlock() {
   EM = document.getElementById('lemail').value;
@@ -206,7 +245,7 @@ async function loadSettings() {
     if (!res.ok) return;
     if (s.ownerPhone) document.getElementById('setPhone').value = s.ownerPhone;
     if (s.approvalThresholdUsd) document.getElementById('setLimit').value = s.approvalThresholdUsd;
-    if (!s.smsConfigured) document.getElementById('setMsg').textContent = 'Texting is not switched on yet — approvals still show below and in your texts once it is.';
+    if (!s.smsConfigured) document.getElementById('setMsg').textContent = 'Texting is not switched on yet — approve requests here on this page. We will not text you.';
   } catch {}
 }
 async function saveSettings() {
@@ -315,6 +354,10 @@ async function openPortal() {
 
 async function signup() {
   const msg = document.getElementById('signupMsg');
+  if (!document.getElementById('sterms').checked) {
+    msg.innerHTML = '<span class="err">Agree to the Terms of Service and Privacy Policy to create an account.</span>';
+    return;
+  }
   msg.textContent = 'Creating...';
   const res = await fetch(P+'/api/signup', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -326,15 +369,17 @@ async function signup() {
   });
   const data = await res.json();
   if (!res.ok) { msg.innerHTML = `<span class="err">${esc(data.error)}</span>`; return; }
-  // Sign the new company straight in — no need to retype credentials.
   document.getElementById('lemail').value = document.getElementById('semail').value;
   document.getElementById('lpw').value = document.getElementById('spw').value;
   msg.textContent = 'Account created! Signing you in…';
   await unlock();
   FIRST_RUN = true;
   showFirstRun();
-  // First-run funding: send the new company straight to Stripe to connect
-  // their bank and load their starting balance.
+  const phone = (document.getElementById('sphone').value || '').trim();
+  if (phone) {
+    await fetch(P+'/api/admin/settings', { method: 'POST', headers: H(), body: JSON.stringify({ ownerPhone: phone }) }).catch(()=>{});
+    const sp = document.getElementById('setPhone'); if (sp) sp.value = phone;
+  }
   const sf = parseFloat(document.getElementById('sf').value);
   if (sf >= 10) {
     msg.textContent = 'Taking you to Stripe to set up funding…';
@@ -344,9 +389,6 @@ async function signup() {
   }
 }
 
-// A brand-new company gets pointed at the walkthrough before anything else —
-// the setup order matters, and the identity step in particular is where cards
-// get stuck if it is skipped.
 let FIRST_RUN = false;
 function showFirstRun() {
   const c = document.getElementById('setupCard');
@@ -362,8 +404,6 @@ function showFirstRun() {
   c.querySelector('.msg').after(b);
 }
 
-// Shortfall helper: when a wallet doesn't have enough to load a card, offer
-// to jump straight to Stripe funding for the amount they were trying to load.
 async function offerFunding(neededUsd) {
   const amt = Math.max(10, Math.ceil(neededUsd || 0));
   if (!confirm(`Not enough in your company wallet. Add $${amt} from your bank or card now? You'll go to Stripe and come right back.`)) return;
@@ -413,7 +453,7 @@ async function addMerchant() {
   msg.innerHTML = data.onboardingUrl
     ? `Added. Send this onboarding link to the business so they can connect their bank account:<br><a href="${data.onboardingUrl}" target="_blank">${data.onboardingUrl}</a>`
     : 'Added to the card allowlist. Employee cards now work at this business.';
-  document.getElementById('bn').value = ''; document.getElementById('em').value = '';
+  document.getElementById('bn').value = ''; document.getElementById('em').value = ''; const ea=document.getElementById('emAdv'); if(ea) ea.value=''; document.getElementById('bk').value='card'; const ba=document.getElementById('bkAdv'); if(ba) ba.value='card';
   refresh();
 }
 
@@ -442,8 +482,6 @@ async function del(id) {
 
 const fmt = c => '$' + (c/100).toFixed(2);
 
-// A card that exists but is not active declines everywhere and will not add to
-// Apple Wallet or Google Pay, so say so plainly rather than just showing digits.
 function cardCell(e) {
   if (!e.cardLast4) return '<span class="badge pend" title="Card is issued automatically when the employee signs in at the wallet page and confirms their info">Awaiting activation</span>';
   const digits = '&bull;&bull;&bull;&bull; ' + e.cardLast4;
@@ -469,7 +507,6 @@ async function recheckCards() {
   refreshEmployees();
 }
 
-// Setup checklist — derived from live state so it reflects what is actually done.
 function renderSetupSteps(d, emps, merchants) {
   const done = s => `<span class="badge on">done</span>`;
   const todo = `<span class="badge pend">to do</span>`;
@@ -512,12 +549,14 @@ async function refreshEmployees() {
 
 async function addEmployee() {
   const msg = document.getElementById('empMsg');
+  const name = document.getElementById('en').value.trim();
+  const pin = document.getElementById('ep').value.trim();
   msg.textContent = 'Adding...';
   const res = await fetch(P+'/api/admin/employees', {
     method: 'POST', headers: H(),
     body: JSON.stringify({
-      name: document.getElementById('en').value,
-      pin: document.getElementById('ep').value,
+      name: name,
+      pin: pin,
       initialAmount: document.getElementById('ef').value
     })
   });
@@ -527,12 +566,32 @@ async function addEmployee() {
     if (String(data.error).includes('company wallet')) offerFunding(parseFloat(document.getElementById('ef').value));
     return;
   }
-  msg.textContent = data.note || data.warning || 'Employee added.';
+  const share = (name || 'Your crew member') + "'s SaySo card\nPIN: " + pin + "\nSign in at https://saysocard.com/employee\nIt's a virtual card — no plastic. Activate on that page, then add it to Apple Pay or Google Pay.";
+  msg.innerHTML = (data.note || data.warning || 'Employee added.') +
+    '<div class="share"><h3>Send this to ' + esc(name || 'them') + '</h3>' +
+    '<pre id="empShareText">' + esc(share) + '</pre>' +
+    '<button type="button" class="small" style="margin-top:10px" onclick="copyEmpShare()">Copy</button> ' +
+    '<span id="empShareCopied" class="msg"></span>' +
+    '<div class="msg">We do not send this by text. Copy it and send it yourself.</div></div>';
   document.getElementById('en').value = ''; document.getElementById('ep').value = ''; document.getElementById('ef').value = '';
   refreshEmployees();
   loadBilling();
   loadWallet();
   loadDashboard();
+}
+
+async function copyEmpShare() {
+  const t = document.getElementById('empShareText');
+  const note = document.getElementById('empShareCopied');
+  if (!t) return;
+  try {
+    await navigator.clipboard.writeText(t.textContent);
+    if (note) note.textContent = ' Copied.';
+  } catch {
+    const r = document.createRange(); r.selectNodeContents(t);
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    if (note) note.textContent = ' Select the text and copy.';
+  }
 }
 
 async function fundEmployee(id) {
